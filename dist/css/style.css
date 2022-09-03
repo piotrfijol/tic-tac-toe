@@ -2,3 +2,75 @@
     margin: 0;
     padding: 0;
 }
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    align-items: center;
+    gap: none;
+}
+
+.tile {
+    width: 150px;
+    height: 150px;
+    border: 5px solid rgb(78, 34, 14);
+    box-sizing: border-box;
+}
+
+.tile:nth-child(1) {
+    border-top: none;
+    border-left: none;
+}
+
+.tile:nth-child(2) {
+    border-top: none;
+}
+
+.tile:nth-child(3) {
+    border-top: none;
+    border-right: none;
+}
+
+.tile:nth-child(4) {
+    border-left: none;
+}
+
+.tile:nth-child(6) {
+    border-right: none;
+}
+
+.tile:nth-child(7) {
+    border-left: none;
+    border-bottom: none;
+}
+
+.tile:nth-child(8) {
+    border-bottom: none;
+}
+
+.tile:nth-child(9) {
+    border-bottom: none;
+    border-right: none;
+}
+
+.tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(0, 0, 0);
+}
+
+.tile .marker {
+    font-size: 72px;
+    font-weight: 800;
+    font-family: sans-serif;
+}
