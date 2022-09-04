@@ -23,7 +23,6 @@ export default function Gameboard(gameboardSize) {
             _grid[x][y] = marker; 
             return true;
         }
-        
         return false;
     }
 
@@ -33,4 +32,6 @@ export default function Gameboard(gameboardSize) {
         getGridSize,
 
     }
+
+    return ob;
 }
