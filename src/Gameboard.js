@@ -17,6 +17,10 @@ export default function Gameboard(gameboardSize) {
         return _gridSize;
     }
 
+    const getGrid = () => {
+        return _grid.slice();
+    }
+
 
     const setMarkerAtPosition = (x, y, marker) => {
         if(_grid[x][y] !== '') {
@@ -30,7 +34,7 @@ export default function Gameboard(gameboardSize) {
 
     let ob = {
         getGridSize,
-
+        getGrid,
     }
 
     return ob;
