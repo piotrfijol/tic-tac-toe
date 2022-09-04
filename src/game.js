@@ -2,6 +2,7 @@ import Player from './Player.js';
 import Gameboard from './Gameboard.js';
 import * as displayController from './displayController.js';
 
+
 let _players = [];
 let _gameboard;
 let _round = 0;
@@ -20,7 +21,12 @@ function getRound() {
 
 function initGameboard(gridSize) {
     let gameboard = new Gameboard(gridSize);
-    displayController.renderBoard(gameboard.getGrid());
+    displayController.renderBoard(gameboard.getGrid(), ev => {
+        makeMove(
+            ev.currentTarget.dataset.position % 3, 
+            parseInt(ev.currentTarget.dataset.position / 3),
+            _players[0].getMarker())
+    });
 
     return gameboard;
 }
@@ -39,6 +45,13 @@ function makeMove(x, y, marker) {
                 //Win
                 break;
             default:
+                newRound();
+                displayController.renderBoard(_gameboard.getGrid(), ev => {
+                    makeMove(
+                        ev.currentTarget.dataset.position % 3, 
+                        parseInt(ev.currentTarget.dataset.position / 3),
+                        _players[0].getMarker())
+                });
                 break;
         }
         
@@ -60,6 +73,8 @@ function startGame() {
     let gridSize = 3;
     _gameboard = initGameboard(gridSize);
 }
+
+
 
 export {
     startGame,
