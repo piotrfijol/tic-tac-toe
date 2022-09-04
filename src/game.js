@@ -42,6 +42,7 @@ function makeMove(x, y, marker) {
     let playerMoved = _gameboard.setMarkerAtPosition(x, y, marker);
     if(!playerMoved) {
         console.error("Cant overwrite other player's marker");
+        return false;
     } else {
         newRound();
         displayController.renderBoard(_gameboard.getGrid(), ev => {
@@ -50,11 +51,44 @@ function makeMove(x, y, marker) {
                 parseInt(ev.currentTarget.dataset.position / 3),
                 _players[0].getMarker())
         });
-           restartGame();
+
+        let scenario = checkScenario(x, y, marker);
+
+        switch(scenario) {
+            case 1:
+                console.log("That's a tie");
+                restartGame();
+                break;
+            case 2:
+                console.log(marker + " is a winner!");
+                restartGame();
+                break;
         }
         
+        //if Computer's move
+        if(_round % 2 !== 0) {
+            AIMakeDecision();
+        }
+    }
+
+    return true;
 }
 
+function AIMakeDecision() {
+    let decision = {
+        x: Math.floor(Math.random() * _gameboard.getGridSize()),
+        y: Math.floor(Math.random() * _gameboard.getGridSize())
+    }
+    
+    while(!makeMove(decision.x, decision.y, _players[1].getMarker())) {
+        decision = {
+            x: Math.floor(Math.random() * _gameboard.getGridSize()),
+            y: Math.floor(Math.random() * _gameboard.getGridSize())
+        }
+    }
+    console.log(decision)
+
+}
 
 function checkScenario(x, y, marker) {
     let state = _gameboard.getGrid();
