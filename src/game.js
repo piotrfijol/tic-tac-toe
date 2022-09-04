@@ -56,6 +56,31 @@ function makeMove(x, y, marker) {
 }
 
 
+function checkScenario(x, y, marker) {
+    let state = _gameboard.getGrid();
+
+    // Check rows;
+    if(!state[y].some(field => field !== marker)) {
+        return 2;
+    }
+
+    //Check cols;
+    if(!state.some(row => row[x] !== marker)) {
+        return 2;
+    }
+
+    //Check diagonals
+    if(x === y  && !state.some((row, index) => row[index] !== marker)) {
+        return 2;
+    } else if(x === 2-y && !state.some((row, index) => row[2-index] !== marker)) {
+        return 2;
+    } 
+
+    if(getRound() === _gameboard.getGridSize() ** 2) return 1;
+
+    return 0;
+}
+
 function startGame() {
     let markers = ['x',' o'];  
     let playerMarker = Math.floor(Math.random() * 2);   
