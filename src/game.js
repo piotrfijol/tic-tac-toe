@@ -7,6 +7,8 @@ let _players = [];
 let _gameboard;
 let _round = 0;
 
+let gridSize = 3;
+
 function getGameboard() {
     return _gameboard;
 }
@@ -70,7 +72,6 @@ function startGame() {
     let computer  = new Player(markers[(playerMarker + 1) % markers.length]);    
     _players.push(playerOne, computer);
     
-    let gridSize = 3;
     _gameboard = initGameboard(gridSize);
 }
 
