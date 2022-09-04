@@ -33,34 +33,28 @@ function initGameboard(gridSize) {
     return gameboard;
 }
 
+function restartGame() {
+    _gameboard = new Gameboard(gridSize);
+    _round = 0;
+}
+
 function makeMove(x, y, marker) {
     let playerMoved = _gameboard.setMarkerAtPosition(x, y, marker);
     if(!playerMoved) {
         console.error("Cant overwrite other player's marker");
     } else {
-        let scenario = checkScenario(x, y, marker);
-        switch(scenario) {
-            case 1:
-                //Tie
-                break;
-            case 2:
-                //Win
-                break;
-            default:
-                newRound();
-                displayController.renderBoard(_gameboard.getGrid(), ev => {
-                    makeMove(
-                        ev.currentTarget.dataset.position % 3, 
-                        parseInt(ev.currentTarget.dataset.position / 3),
-                        _players[0].getMarker())
-                });
-                break;
+        newRound();
+        displayController.renderBoard(_gameboard.getGrid(), ev => {
+            makeMove(
+                ev.currentTarget.dataset.position % 3, 
+                parseInt(ev.currentTarget.dataset.position / 3),
+                _players[0].getMarker())
+        });
+           restartGame();
         }
         
-    }
 }
 
-function checkScenario(x, y, marker) {}
 
 function startGame() {
     let markers = ['x',' o'];  
