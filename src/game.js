@@ -1,4 +1,5 @@
 import Player from './Player.js';
+import Gameboard from './Gameboard.js';
 
 let _players = [];
 let _gameboard;
