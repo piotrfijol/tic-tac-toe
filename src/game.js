@@ -52,7 +52,7 @@ function makeMove(x, y, marker) {
                 _players[0].getMarker())
         });
 
-        let scenario = checkScenario(x, y, marker);
+        let scenario = checkScenario(getRound(), _gameboard.getGrid());
 
         switch(scenario) {
             case 1:
@@ -151,27 +151,28 @@ function AIMakeDecision() {
     makeMove(decision.x, decision.y, _players[0].getMarker())
 
     }
-    function checkScenario(x, y, marker) {
-        let state = _gameboard.getGrid();
+
+    function checkScenario(round, state) {
+        let marker = _players[round%2].getMarker();
 
         // Check rows;
-        if(!state[y].some(field => field !== marker)) {
+        if(state.some(row => row.every(field => field === marker))) {
             return 2;
         }
 
         //Check cols;
-        if(!state.some(row => row[x] !== marker)) {
+        if(state[0].some((col, colID) => state.every(row => row[colID] === marker))) {
             return 2;
         }
 
         //Check diagonals
-        if(x === y  && !state.some((row, index) => row[index] !== marker)) {
+        if(!state.some((row, index) => row[index] !== marker)) {
             return 2;
-        } else if(x === 2-y && !state.some((row, index) => row[2-index] !== marker)) {
+        } else if(!state.some((row, index) => row[2-index] !== marker)) {
             return 2;
         } 
 
-    if(getRound() === _gameboard.getGridSize() ** 2) return 1;
+        if((round+1) === (_gameboard.getGridSize() ** 2)) return 1;
 
         return 0;
     }
