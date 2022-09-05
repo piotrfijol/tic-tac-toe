@@ -27,15 +27,17 @@ function initGameboard(gridSize) {
         makeMove(
             ev.currentTarget.dataset.position % 3, 
             parseInt(ev.currentTarget.dataset.position / 3),
-            _players[0].getMarker())
+            _players[1].getMarker())
     });
 
     return gameboard;
 }
 
 function restartGame() {
-    _gameboard = new Gameboard(gridSize);
+    _gameboard = initGameboard(gridSize);
+    displayController.removeMessage();
     _round = 0;
+    AIMakeDecision();
 }
 
 function makeMove(x, y, marker) {
@@ -44,34 +46,40 @@ function makeMove(x, y, marker) {
         console.error("Cant overwrite other player's marker");
         return false;
     } else {
-        newRound();
         displayController.renderBoard(_gameboard.getGrid(), ev => {
             makeMove(
                 ev.currentTarget.dataset.position % 3, 
                 parseInt(ev.currentTarget.dataset.position / 3),
-                _players[0].getMarker())
+                _players[1].getMarker())
         });
 
         let scenario = checkScenario(getRound(), _gameboard.getGrid());
 
         switch(scenario) {
             case 1:
-                console.log("That's a tie");
-                restartGame();
+                displayController.renderMessage("That's a TIE!");
+                gameOver();
                 break;
             case 2:
-                console.log(marker + " is a winner!");
-                restartGame();
+                let msg = marker === _players[1].getMarker() ? 'You won! Send me a screenshot ;o' : 'AI won.. come on man';
+                displayController.renderMessage(msg);
+                gameOver();
                 break;
         }
+        newRound();
         
         //if Computer's move
-        if(_round % 2 !== 0) {
+        if(_round % 2 === 0) {
             AIMakeDecision();
         }
     }
 
     return true;
+}
+
+function gameOver() {
+    displayController.detachEvents();
+    setTimeout(restartGame, 1000);
 }
 
 function emptySpots(board) {
@@ -197,13 +205,15 @@ function startGame() {
     let markers = ['x','o'];  
     let playerMarker = Math.floor(Math.random() * 2);   
 
-    let playerOne = new Player(markers[playerMarker]);
-
     // Assign to the AI player a marker that is still free
     let computer  = new Player(markers[(playerMarker + 1) % markers.length]);    
-    _players.push(playerOne, computer);
+
+    let playerOne = new Player(markers[playerMarker]);
+
+    _players.push(computer, playerOne);
     
     _gameboard = initGameboard(gridSize);
+    AIMakeDecision();
 }
 
 
