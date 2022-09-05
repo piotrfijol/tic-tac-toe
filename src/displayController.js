@@ -32,6 +32,28 @@ const clearBoard = () => {
         gridContainer.remove();
 }
 
+const renderMessage = (text) => {
+    let msg = document.createElement('p');
+    msg.textContent = text;
+    msg.classList.add('message');
+
+    document.body.appendChild(msg);
+}
+
+const removeMessage = () => {
+    document.querySelector('.message').remove();
+}
+
+const detachEvents = () => {
+    document.querySelectorAll('.tile').forEach(tile => {
+        let newTile = tile.cloneNode(true);
+        tile.parentNode.replaceChild(newTile, tile)
+    })
+}
+
 export {
-    renderBoard
+    renderBoard,
+    renderMessage,
+    removeMessage,
+    detachEvents
 }
