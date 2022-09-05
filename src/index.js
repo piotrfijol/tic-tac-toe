@@ -1,3 +1,3 @@
-import * as Game from './game.js';
+import Game from './game.js';
 
 Game.startGame();
