@@ -75,6 +75,7 @@ function makeMove(x, y, marker) {
 }
 
 function AIMakeDecision() {
+    /*
     let decision = {
         x: Math.floor(Math.random() * _gameboard.getGridSize()),
         y: Math.floor(Math.random() * _gameboard.getGridSize())
@@ -87,36 +88,96 @@ function AIMakeDecision() {
         }
     }
     console.log(decision)
+*/
 
-}
+    
+    let decision = minimax(getRound(), _gameboard.getGrid(), true, 0);
 
-function checkScenario(x, y, marker) {
-    let state = _gameboard.getGrid();
+    function minimax(round, board, isMax, depth) {
+        let freeSpots = emptySpots(board);
+        let marker = _players[round%2].getMarker();
 
-    // Check rows;
-    if(!state[y].some(field => field !== marker)) {
-        return 2;
+        let moveResult = checkScenario(Math.max(0, round-1), board);
+        // Look for termial nodes
+        if(moveResult === 1) {
+            return {value: 0};
+        } else if (moveResult === 2) {
+            return {value: isMax ? -50+depth : 0-depth};
+        }
+
+        if(isMax) {
+            let val = {value: -Infinity};
+            for(let freeSpot of freeSpots) {
+
+                let boardCpy = JSON.parse(JSON.stringify(board));
+                boardCpy[freeSpot[1]][freeSpot[0]] = marker;
+
+                let nodeVal = minimax(
+                    round + 1, 
+                    boardCpy,
+                    false,
+                    depth+1
+                    )
+                
+                if(nodeVal.value > val.value) {
+                    val = nodeVal;
+                    val.x = freeSpot[0];
+                    val.y = freeSpot[1];
+                }
+            }
+            return val;
+        } else {
+            let val = {value: Infinity};
+            for(let freeSpot of freeSpots) {
+
+                let boardCpy = JSON.parse(JSON.stringify(board));
+                boardCpy[freeSpot[1]][freeSpot[0]] = marker;
+
+                let nodeVal = minimax(
+                    round + 1,
+                    boardCpy,
+                    true,
+                    depth+1
+                    )
+
+                    if(nodeVal.value < val.value) {
+                        val = nodeVal;
+                    }
+            }
+            return val;
+        }
     }
 
-    //Check cols;
-    if(!state.some(row => row[x] !== marker)) {
-        return 2;
-    }
+    makeMove(decision.x, decision.y, _players[0].getMarker())
 
-    //Check diagonals
-    if(x === y  && !state.some((row, index) => row[index] !== marker)) {
-        return 2;
-    } else if(x === 2-y && !state.some((row, index) => row[2-index] !== marker)) {
-        return 2;
-    } 
+    }
+    function checkScenario(x, y, marker) {
+        let state = _gameboard.getGrid();
+
+        // Check rows;
+        if(!state[y].some(field => field !== marker)) {
+            return 2;
+        }
+
+        //Check cols;
+        if(!state.some(row => row[x] !== marker)) {
+            return 2;
+        }
+
+        //Check diagonals
+        if(x === y  && !state.some((row, index) => row[index] !== marker)) {
+            return 2;
+        } else if(x === 2-y && !state.some((row, index) => row[2-index] !== marker)) {
+            return 2;
+        } 
 
     if(getRound() === _gameboard.getGridSize() ** 2) return 1;
 
-    return 0;
-}
+        return 0;
+    }
 
 function startGame() {
-    let markers = ['x',' o'];  
+    let markers = ['x','o'];  
     let playerMarker = Math.floor(Math.random() * 2);   
 
     let playerOne = new Player(markers[playerMarker]);
