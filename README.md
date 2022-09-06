@@ -1,4 +1,6 @@
-# Tic Tac Toe
+# Tic Tac Toe 
+
+![Tic tac toe game](https://i.ibb.co/tJ261GB/New-Project-1.png)
 
 ## Description
 
@@ -18,6 +20,5 @@ for the opponent ([Wikipedia's article on the subject](https://en.wikipedia.org/
 ## Test it here
 
 Here's [the current version of the game](https://piotrfijol.github.io/tic-tac-toe), free to test
-
 
 
