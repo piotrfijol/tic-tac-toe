@@ -10,7 +10,6 @@ let _gameboard;
 let _round = 0;
 
 const GRID_SIZE = 3;
-const markers = ['x', 'o'];
 
 function newRound() {
   _round += 1;
@@ -21,7 +20,7 @@ function getRound() {
 }
 
 function currentMarker() {
-  return markers[getRound()%2];
+  return _players[getRound()%2].getMarker();
 }
 
 function checkScenario(round, state) {
@@ -140,11 +139,10 @@ function AIMakeDecision() {
   let decision;
   if(AI.difficulty === EASY || getRound() === 0) {
 
-    decision = randomChoice();
-
-    while (!makeMove(decision.x, decision.y, _players[0].getMarker())) {
+    do {
       decision = randomChoice();
-    }
+    } while (!makeMove(decision.x, decision.y, AI.getMarker()));
+
   } else if (AI.difficulty === UNBEATABLE) {
     decision = minimax(getRound(), _gameboard.getGrid(), true, 0);
     makeMove(decision.x, decision.y, AI.getMarker());
@@ -204,6 +202,7 @@ function AIMakeDecision() {
 }
 
 function startGame() {
+  const markers = ['x', 'o'];
   const playerMarker = Math.floor(Math.random() * 2);
 
   const playerOne = Player(markers[playerMarker]);
