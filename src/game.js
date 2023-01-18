@@ -129,15 +129,16 @@ function emptySpots(board) {
   return result;
 }
 
+function randomChoice() {
+  return {
+    x: Math.floor(Math.random() * _gameboard.getGridSize()),
+    y: Math.floor(Math.random() * _gameboard.getGridSize()),
+  };
+}
+
 function AIMakeDecision() {
   let decision;
-  if(AI.difficulty === EASY) {
-    function randomChoice() {
-      return {
-        x: Math.floor(Math.random() * _gameboard.getGridSize()),
-        y: Math.floor(Math.random() * _gameboard.getGridSize()),
-      };
-    }
+  if(AI.difficulty === EASY || getRound() === 0) {
 
     decision = randomChoice();
 
@@ -208,7 +209,7 @@ function startGame() {
   const playerOne = Player(markers[playerMarker]);
 
   // Assign to the AI player a marker that is still free
-  AI = AIPlayer(markers[(playerMarker + 1) % markers.length], EASY);
+  AI = AIPlayer(markers[(playerMarker + 1) % markers.length], UNBEATABLE);
   _players.push(AI, playerOne);
 
   _gameboard = initGameboard(GRID_SIZE);
