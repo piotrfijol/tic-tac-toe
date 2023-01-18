@@ -144,11 +144,11 @@ function AIMakeDecision() {
     } while (!makeMove(decision.x, decision.y, AI.getMarker()));
 
   } else if (AI.difficulty === UNBEATABLE) {
-    decision = minimax(getRound(), _gameboard.getGrid(), true, 0);
+    decision = minimax(getRound(), _gameboard.getGrid(), -Infinity, Infinity, true, 0);
     makeMove(decision.x, decision.y, AI.getMarker());
   }
 
-  function minimax(round, board, isMax, depth) {
+  function minimax(round, board, alpha, beta, isMax, depth) {
     const freeSpots = emptySpots(board);
     const marker = _players[round % 2].getMarker();
     const moveResult = checkScenario(Math.max(0, round - 1), board);
@@ -161,6 +161,7 @@ function AIMakeDecision() {
     }
 
     if (isMax) {
+      let alphaVal = alpha;
       let val = { value: -Infinity };
       for (const freeSpot of freeSpots) {
         const boardCpy = JSON.parse(JSON.stringify(board));
@@ -169,17 +170,25 @@ function AIMakeDecision() {
         let nodeVal = minimax(
           round + 1,
           boardCpy,
+          alphaVal,
+          beta,
           false,
           depth + 1,
         );
 
         if (nodeVal.value > val.value) {
           val = nodeVal;
+          alphaVal = nodeVal.value;
           [val.x, val.y] = [freeSpot[0], freeSpot[1]];
+        }
+
+        if(alpha >= beta) {
+          return val;
         }
       }
       return val;
     } else {
+      let betaVal = beta;
       let val = { value: Infinity };
       for (const freeSpot of freeSpots) {
         const boardCpy = JSON.parse(JSON.stringify(board));
@@ -188,12 +197,19 @@ function AIMakeDecision() {
         const nodeVal = minimax(
           round + 1,
           boardCpy,
+          alpha,
+          betaVal,
           true,
           depth + 1,
         );
 
         if (nodeVal.value < val.value) {
           val = nodeVal;
+          betaVal = nodeVal.value;
+        }
+
+        if(beta <= alpha) {
+          return val;
         }
       }
       return val;
