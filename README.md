@@ -19,6 +19,6 @@ for the opponent ([Wikipedia's article on the subject](https://en.wikipedia.org/
 
 ## Test it here
 
-Here's [the current version of the game](https://piotrfijol.github.io/tic-tac-toe), free to test
+Here's [the current version of the game](https://piotrfijol.github.io/tic-tac-toe/dist), free to test
 
 
